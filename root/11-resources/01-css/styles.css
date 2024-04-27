@@ -1,9 +1,6 @@
 /*
   First Style: Fading in style when the page loads
 */
-body {
-    
-}
 
 @keyframes fadeinall {
     0% { opacity: 1; }
