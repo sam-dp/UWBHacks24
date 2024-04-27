@@ -1,20 +1,35 @@
 window.onload = function() {
-    setTimeout(function() {
-        document.getElementById("fadein").remove();
-    }, 1000);
+    const uploadInput = document.getElementById("input-file");
+    const uploadedImageContainer = document.getElementById("uploaded-image");
+
+    uploadInput.onchange = function() {
+        // Remove existing uploaded image if any
+        uploadedImageContainer.innerHTML = '';
+
+        // Create new image element
+        const image = document.createElement("img");
+        image.src = URL.createObjectURL(uploadInput.files[0]);
+        image.style.maxWidth = "100%";
+        image.style.height = "100%";
+
+        // Append image to the uploaded image container
+        uploadedImageContainer.appendChild(image);
+    };
 };
 
 const uploadInput = document.getElementById("input-file");
-const image = document.getElementById("image");
+const imageContainer = document.getElementById("image-container");
 
 uploadInput.onchange = function() {
-    const imageURL = URL.createObjectURL(uploadInput.files[0]);
-    image.src = imageURL;
+  // Capture uploaded image
+  const imageURL = URL.createObjectURL(uploadInput.files[0]);
+  const image = document.createElement("img");
+  image.src = imageURL;
 
-    // Append the image below the box
-    const box = document.getElementById("box");
-    const uploadedImage = document.createElement("img");
-    uploadedImage.src = imageURL;
-    box.appendChild(uploadedImage);
+  // Add the image to the container and display it
+  imageContainer.innerHTML = ""; // Clear previous content
+  imageContainer.appendChild(image);
+  imageContainer.style.display = "block"; // Show the container
 };
+
 
