@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="11-resources/05-js/main.js" defer> </script>
     <title>Image Upload and Save</title>
 </head>
 <body>
     <input type="file" id="input-file" accept="image/*">
     <img src="" id="image">
-
-    <script>
-        let inputFile = document.getElementById("input-file");
-        let image = document.getElementById("image");
-        inputFile.onchange = function(){
-            image.src = URL.createObjectURL(inputFile.files[0]);
-        }
-    </script>
 </body>
 </html>
