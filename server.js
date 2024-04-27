@@ -31,26 +31,29 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         .toFormat('jpg')
         .toBuffer()
         .then((data) => {
-            // Save the converted image to the server's file system
-            const filePath = `root/11-resources/02-images/01-upload/meal.jpg`;
-            fs.writeFile(filePath, data, (err) => {
-                if (err) {
-                    console.error('Error saving converted image:', err);
-                    return res.status(500).send('Error saving converted image');
-                }
-                console.log('Converted image saved:', filePath);
+        // Save the converted image to the server's file system
+        const filePath = `root/11-resources/02-images/01-upload/meal.jpg`;
+        fs.writeFile(filePath, data, (err) => {
+            if (err) {
+                console.error('Error saving converted image:', err);
+                return res.status(500).send('Error saving converted image');
+            }
+            console.log('Converted image saved:', filePath);
 
-                // After saving the converted image, delete the uploaded file
-                deleteUploadedFile(file.path);
+            // Close the file handle
+            fs.closeSync(fs.openSync(filePath, 'r'));
 
-                // Call external API
-                //callExternalAPI(filePath, res);
-            });
-        })
-        .catch((err) => {
-            console.error('Error converting image:', err);
-            res.status(500).send('Error converting image');
+            // After saving the converted image, delete the uploaded file
+            deleteUploadedFile(file.path);
+
+            // Call external API
+            //callExternalAPI(filePath, res);
         });
+    })
+    .catch((err) => {
+        console.error('Error converting image:', err);
+        res.status(500).send('Error converting image');
+    });
 });
 
 // Function to delete uploaded file
@@ -63,6 +66,7 @@ function deleteUploadedFile(filePath) {
         }
     });
 }
+
 
 // Function to call external API
 function callExternalAPI(imagePath, res) {
