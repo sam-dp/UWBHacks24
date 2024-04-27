@@ -14,7 +14,7 @@ app.use(express.static('root'));
 const upload = multer({ dest: 'uploads/' });
 
 // POST
-// Handle file upload endpoint
+// Handle file upload endpoint and deletion of temp files
 app.post('/upload-image', upload.single('image'), (req, res) => {
     const file = req.file;
     if (!file) {
@@ -36,6 +36,14 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
                     return res.status(500).send('Error saving converted image');
                 }
                 console.log('Converted image saved:', filePath);
+
+                // After saving the converted image, delete the uploaded file
+                fs.unlink(file.path, (err) => {
+                    if (err) {
+                        console.error('Error deleting uploaded file:', err);
+                    }
+                });
+
                 res.json({ message: 'Image received and saved successfully' });
             });
         })
@@ -45,28 +53,6 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         });
 });
 
-// DELETE
-// Endpoint to delete locally stored pictures
-app.delete('/delete-uploaded-images', (req, res) => {
-    const directory = "uploads/";
-
-    fs.readdir(directory, (err, files) => {
-        if (err) {
-            console.error('Error reading directory:', err);
-            return res.status(500).send('Error reading directory');
-        }
-
-        files.forEach((file) => {
-            fs.unlink(path.join(directory, file), (err) => {
-                if (err) {
-                    console.error('Error deleting file:', err);
-                }
-            });
-        });
-
-        res.json({ message: 'Uploaded images deleted successfully' });
-    });
-});
 
 // Start the server
 app.listen(port, () => {
