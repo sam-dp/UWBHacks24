@@ -9,7 +9,6 @@ input.addEventListener('change', function() {
     imageUrl = URL.createObjectURL(input.files[0]);
     image.src = imageUrl;
 
-
     // Get the selected file
     const file = this.files[0];
 
