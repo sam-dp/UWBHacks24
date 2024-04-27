@@ -8,6 +8,8 @@
       
       <link rel="icon" href="favicon.png">
       <link rel="stylesheet" href="11-resources\01-css\styles.css">
+      <script src="11-resources\05-js\main.js" defer> </script>
+
   </head>
   <body>
       <div id="fadein"></div>
@@ -19,30 +21,7 @@
     </form>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-    <script>
-      $(document).ready(function() {
-          $('#uploadButton').click(function() {
-              var formData = new FormData();
-              formData.append('photo', $('#photo')[0].files[0]);
-      
-              $.ajax({
-                  url: '/upload',
-                  type: 'POST',
-                  data: formData,
-                  processData: false, // prevent jQuery from automatically transforming the data into a query string
-                  contentType: false,
-                  success: function(data) {
-                      console.log('Upload successful!');
-                      alert('File uploaded successfully.');
-                  },
-                  error: function(xhr, status, error) {
-                      console.error('Upload failed: ' + error);
-                      alert('Upload failed!');
-                  }
-              });
-          });
-      });
-      </script>
+    <script src="11-resources\05-js\main.js"></script>
     
   </body>
 </html>

@@ -2,13 +2,15 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const app = express();
+const cors = require('cors');
 const port = 3000;
 
+app.use(cors());
+
 // Configure Multer
-// The diskStorage engine gives you full control on storing files to disk.
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'uploads/')  // Specify the folder to store the images
+        cb(null, '11-resources\\02-images\\temp')
     },
     filename: function(req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))  // Name the file
