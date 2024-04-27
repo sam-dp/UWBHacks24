@@ -1,32 +1,25 @@
 const express = require('express');
+const multer = require('multer');
+
 const app = express();
 const port = 3000;
 
 // Serves the HTML and CSS
 app.use(express.static('root'));
 
+// Configure multer to handle file uploads
+const upload = multer({ dest: 'uploads/' });
 
-// Take In image URL from Client-side
-app.get('/upload', (req, res) => {
+// Handle file upload endpoint
+app.post('/upload-image', upload.single('image'), (req, res) => {
+    const file = req.file;
+    if (!file) {
+        return res.status(400).send('No file uploaded');
+    }
 
-    // https.get(url,(res) => { 
-    //     // Image will be stored at this path 
-    //     const path = `${__dirname}/img.jpeg`;  
-    //     const filePath = fs.createWriteStream(path); 
-    //     res.pipe(filePath); 
-    //     filePath.on('finish',() => { 
-    //         filePath.close(); 
-    //         console.log('Download Completed');  
-    //     }) 
-    // })
-    console.log('In server.js');
-
-});
-
-
-// Define a route handler for the root path
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    console.log('Received image file:', file);
+    
+    res.json({ message: 'Image received successfully' });
 });
 
 // Start the server
