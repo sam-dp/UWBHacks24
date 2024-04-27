@@ -6,43 +6,14 @@
     <title>Image Upload and Save</title>
 </head>
 <body>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" id="imageInput" name="image" accept="image/*">
-        <button type="button" onclick="uploadImage()">Upload Image</button>
-        <button type="button" onclick="saveImage()">Save Image</button>
-    </form>
+    <input type="file" id="input-file" accept="image/*">
+    <img src="" id="image">
 
     <script>
-        function uploadImage() {
-            const input = document.getElementById('imageInput');
-            const file = input.files[0];
-            const formData = new FormData();
-            formData.append('image', file);
-
-            fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-
-        function saveImage() {
-            fetch('/save', {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        let inputFile = document.getElementById("input-file");
+        let image = document.getElementById("image");
+        inputFile.onchange = function(){
+            image.src = URL.createObjectURL(inputFile.files[0]);
         }
     </script>
 </body>
