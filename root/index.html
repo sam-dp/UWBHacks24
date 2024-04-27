@@ -1,15 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>NutriPic</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
-  <link rel="stylesheet" type="text/css" href="root\11-resources\01-css\styles.css" />
-  <link rel="icon" href="">
-</head>
-<body>
-  <h3>NutriPic</h3>
-  <script src=""></script>
-</body>
+  <head>
+      <meta charset="UTF-8" />
+      <title>NutriPic</title>
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <meta name="description" content="NutriPic - Analyze food photos and get nutritional facts!" />
+      
+      <link rel="icon" href="favicon.png">
+      <link rel="stylesheet" href="11-resources\01-css\styles.css">
+  </head>
+  <body>
+      <div id="fadein"></div>
+      <h1>Welcome to NutriPic</h1>
+      <p>Upload a food photo to analyze its nutritional facts!</p>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="photo" id="photo" accept="image/*" required>
+        <button type="button" id="uploadButton">Upload</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function() {
+          $('#uploadButton').click(function() {
+              var formData = new FormData();
+              formData.append('photo', $('#photo')[0].files[0]);
+      
+              $.ajax({
+                  url: '/upload',
+                  type: 'POST',
+                  data: formData,
+                  processData: false, // prevent jQuery from automatically transforming the data into a query string
+                  contentType: false,
+                  success: function(data) {
+                      console.log('Upload successful!');
+                      alert('File uploaded successfully.');
+                  },
+                  error: function(xhr, status, error) {
+                      console.error('Upload failed: ' + error);
+                      alert('Upload failed!');
+                  }
+              });
+          });
+      });
+      </script>
+    
+  </body>
 </html>
