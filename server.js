@@ -11,7 +11,7 @@ const port = 3000;
 app.use(express.static('root'));
 
 // Configure multer to handle file uploads
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'root/11-resources/02-images/02-temp' });
 
 // POST
 // Handle file upload endpoint and deletion of temp files
@@ -29,7 +29,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         .toBuffer()
         .then((data) => {
             // Save the converted image to the server's file system
-            const filePath = `./converted_images/meal.jpg`;
+            const filePath = `root/11-resources/02-images/01-upload/meal.jpg`;
             fs.writeFile(filePath, data, (err) => {
                 if (err) {
                     console.error('Error saving converted image:', err);
