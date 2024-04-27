@@ -13,6 +13,7 @@ app.use(express.static('root'));
 // Configure multer to handle file uploads
 const upload = multer({ dest: 'uploads/' });
 
+// POST
 // Handle file upload endpoint
 app.post('/upload-image', upload.single('image'), (req, res) => {
     const file = req.file;
@@ -44,6 +45,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         });
 });
 
+// DELETE
 // Endpoint to delete locally stored pictures
 app.delete('/delete-uploaded-images', (req, res) => {
     const directory = "uploads/";
