@@ -1,38 +1,47 @@
 const express = require('express');
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
+
 const app = express();
-const cors = require('cors');
-const port = 3000;
+const PORT = 3000;
 
-app.use(cors());
-
-// Configure Multer
+// Multer configuration
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, '11-resources/02-images/temp');
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
     },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);  // Use the original filename
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
-
 const upload = multer({ storage: storage });
 
-// Routes
+// Serve the HTML file
 app.get('/', (req, res) => {
-    res.send('Hello world.');  // Test route
+    res.sendFile(__dirname + '/index.html');
 });
 
-// POST route for uploading files
-app.post('/upload', upload.single('photo'), (req, res) => {
-    if (req.file) {
-        res.send('File uploaded successfully.');
-    } else {
-        res.send('Something went wrong with the file upload.');
-    }
+// Handle image upload
+app.post('/upload', upload.single('image'), (req, res) => {
+    res.json({ message: 'Image uploaded successfully' });
 });
 
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+// Handle image saving
+app.get('/save', (req, res) => {
+    const imagePath = path.join(__dirname, 'uploads/', req.file.filename);
+    const destination = path.join(__dirname, 'saved_images/', req.file.filename);
+    
+    fs.copyFile(imagePath, destination, (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Error saving image' });
+        } else {
+            res.json({ message: 'Image saved successfully' });
+        }
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

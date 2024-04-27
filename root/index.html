@@ -1,27 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8" />
-      <title>NutriPic</title>
-      <meta name="viewport" content="width=device-width,initial-scale=1" />
-      <meta name="description" content="NutriPic - Analyze food photos and get nutritional facts!" />
-      
-      <link rel="icon" href="favicon.png">
-      <link rel="stylesheet" href="11-resources\01-css\styles.css">
-      <script src="11-resources\05-js\main.js" defer> </script>
-
-  </head>
-  <body>
-      <div id="fadein"></div>
-      <h1>Welcome to NutriPic</h1>
-      <p>Upload a food photo to analyze its nutritional facts!</p>
-      <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" name="photo" id="photo" accept="image/*" required>
-        <button type="button" id="uploadButton">Upload</button>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload and Save</title>
+</head>
+<body>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="imageInput" name="image" accept="image/*">
+        <button type="button" onclick="uploadImage()">Upload Image</button>
+        <button type="button" onclick="saveImage()">Save Image</button>
     </form>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-    <script src="11-resources\05-js\main.js"></script>
-    
-  </body>
+    <script>
+        function uploadImage() {
+            const input = document.getElementById('imageInput');
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function saveImage() {
+            fetch('/save', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
 </html>
