@@ -1,8 +1,7 @@
-
-
 const express = require('express');
 const multer = require('multer');
-const sharp = require('sharp'); // Import sharp for image conversion
+const sharp = require('sharp');
+const path = require('path');
 const fs = require('fs');
 
 const app = express();
@@ -15,9 +14,6 @@ app.use(express.static('root'));
 const upload = multer({ dest: 'uploads/' });
 
 // Handle file upload endpoint
-//
-// /upload-image
-//
 app.post('/upload-image', upload.single('image'), (req, res) => {
     const file = req.file;
     if (!file) {
@@ -46,16 +42,31 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             console.error('Error converting image:', err);
             res.status(500).send('Error converting image');
         });
+});
 
-    // Get Response from API
-        // TODO
+// Endpoint to delete locally stored pictures
+app.delete('/delete-uploaded-images', (req, res) => {
+    const directory = "uploads/";
 
-    // Delete locally stored pictures
-        // TODO
+    fs.readdir(directory, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err);
+            return res.status(500).send('Error reading directory');
+        }
+
+        files.forEach((file) => {
+            fs.unlink(path.join(directory, file), (err) => {
+                if (err) {
+                    console.error('Error deleting file:', err);
+                }
+            });
+        });
+
+        res.json({ message: 'Uploaded images deleted successfully' });
+    });
 });
 
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-

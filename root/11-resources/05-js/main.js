@@ -33,4 +33,22 @@ input.addEventListener('change', function() {
     .catch(error => {
         console.error('Error uploading image:', error);
     });
+
+    // Send a DELETE request to the server
+    fetch('/delete-uploaded-images', {
+        method: 'DELETE',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to delete uploaded images');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Server response:', data);
+    })
+    .catch(error => {
+        console.error('Error deleting uploaded images:', error);
+    });
 });
