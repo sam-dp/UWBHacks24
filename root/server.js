@@ -10,10 +10,10 @@ app.use(cors());
 // Configure Multer
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, '11-resources\\02-images\\temp')
+        cb(null, '11-resources/02-images/temp');
     },
     filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))  // Name the file
+        cb(null, file.originalname);  // Use the original filename
     }
 });
 
@@ -21,7 +21,7 @@ const upload = multer({ storage: storage });
 
 // Routes
 app.get('/', (req, res) => {
-    res.send('Hello World!');  // Test route
+    res.send('Hello world.');  // Test route
 });
 
 // POST route for uploading files
