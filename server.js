@@ -3,6 +3,9 @@ const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
+const fetch = require('node-fetch');
+const FormData = require('form-data');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
@@ -44,7 +47,29 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
                     }
                 });
 
-                res.json({ message: 'Image received and saved successfully' });
+                // Call external API
+                const apiUserToken = process.env.API_USER_TOKEN;
+                const headers = { 'Authorization': `Bearer ${apiUserToken}` };
+                const urlSegmentation = 'https://api.logmeal.com/v2/image/segmentation/complete';
+
+                const form = new FormData();
+                form.append('image', fs.createReadStream(filePath));
+
+                fetch(urlSegmentation, {
+                    method: 'POST',
+                    headers: headers,
+                    body: form
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API Response:', data);
+                    // Here you can process the API response as needed
+                    res.json({ message: 'Image received, saved, and processed successfully' });
+                })
+                .catch(error => {
+                    console.error('Error calling external API:', error);
+                    res.status(500).send('Error calling external API');
+                });
             });
         })
         .catch((err) => {
@@ -52,7 +77,6 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             res.status(500).send('Error converting image');
         });
 });
-
 
 // Start the server
 app.listen(port, () => {
