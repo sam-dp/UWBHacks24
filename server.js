@@ -46,9 +46,8 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             // After saving the converted image, delete the uploaded file
             //deleteUploadedFile(file.path);
 
-            // Call external API
-            callExternalAPI(filePath, res);
-            //callExternalAPIAndDownload(filePath, res);
+            // Call external API THROUGH PYTHON
+
         });
     })
     .catch((err) => {
@@ -67,54 +66,6 @@ function deleteUploadedFile(filePath) {
         }
     });
 }
-
-
-// Function to call external API
-function callExternalAPI(imagePath, res) {
-    const img = imagePath; // Replace with the path to the image
-    const apiUserToken = process.env.API_USER_TOKEN;; // Replace with your API user token
-    const headers = { 'Authorization': 'Bearer ' + apiUserToken };
-
-    // Single/Several Dishes Detection
-    const segmentationUrl = 'https://api.logmeal.com/v2/image/segmentation/complete';
-    const segmentationForm = new FormData();
-    segmentationForm.append('image', fs.createReadStream(img));
-
-    fetch(segmentationUrl, {
-        method: 'POST',
-        headers: headers,
-        body: segmentationForm
-    })
-    .then(segmentationResponse => {
-        if (!segmentationResponse.ok) {
-            throw new Error('Failed to fetch segmentation API response');
-        }
-        return segmentationResponse.json();
-    })
-    .then(segmentationData => {
-        // Nutritional information
-        const nutritionUrl = 'https://api.logmeal.com/v2/recipe/nutritionalInfo';
-        return fetch(nutritionUrl, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({ imageId: segmentationData.imageId }),
-        });
-    })
-    .then(nutritionResponse => {
-        if (!nutritionResponse.ok) {
-            throw new Error('Failed to fetch nutritional information API response');
-        }
-        return nutritionResponse.json();
-    })
-    .then(nutritionData => {
-        console.log(nutritionData); // Display nutritional info
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-
 
 // Start the server
 app.listen(port, () => {
