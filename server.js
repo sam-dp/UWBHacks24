@@ -63,12 +63,12 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
                 fs.closeSync(fs.openSync(filePath, 'r'));
 
                 // After saving the converted image, delete the uploaded file
-                deleteUploadedFile(file.path);
+                //deleteUploadedFile(file.path);
 
                 // Call external API using Python
-                callPythonAPI(filePath, (apiResponse) => {
-                    res.send(apiResponse);
-                });
+                // callPythonAPI(filePath, (apiResponse) => {
+                //     res.send(apiResponse);
+                // });
             });
         })
         .catch((err) => {

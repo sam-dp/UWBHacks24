@@ -1,9 +1,38 @@
-{
-    "foodName": "flan",
-    "calories": 181.25,
-    "total_fat": 5.0375000000000005,
-    "sodium": 66.25,
-    "carbs": 28.475,
-    "sugar": 28.9375,
-    "protein": 5.6625000000000005
-}
+[
+    {
+        "foodName": "steamed broccoli",
+        "calories": 97.67,
+        "total_fat": 5.5889999999999995,
+        "sodium": 58.01,
+        "carbs": 11.0438,
+        "sugar": 1.9759999999999998,
+        "protein": 3.5227999999999997
+    },
+    {
+        "foodName": "grilled chicken",
+        "calories": 292.8179,
+        "total_fat": 19.652854000000005,
+        "sodium": 273.638003,
+        "carbs": 0.572055,
+        "sugar": 0.011856,
+        "protein": 26.928931000000002
+    },
+    {
+        "foodName": "grilled turkey",
+        "calories": 293.1956,
+        "total_fat": 17.570933,
+        "sodium": 491.555406,
+        "carbs": 4.728695,
+        "sugar": 0.7378,
+        "protein": 29.161660999999995
+    },
+    {
+        "foodName": "pilaf rice",
+        "calories": 194.10000000000002,
+        "total_fat": 6.501,
+        "sodium": 548.230006,
+        "carbs": 28.2965,
+        "sugar": 3.3045,
+        "protein": 5.083500000000001
+    }
+]

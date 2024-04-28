@@ -22,23 +22,29 @@ def process_image(image_path):
 
 def save_nutritional_info(result):
     try:
-        # Extracting only the necessary details
-        selected_nutrients = {
-            "foodName": result.get("foodName", ["Unknown"])[0],  # Get the first food name or "Unknown"
-            "calories": result["nutritional_info"]["totalNutrients"]["ENERC_KCAL"]["quantity"],
-            "total_fat": result["nutritional_info"]["totalNutrients"]["FAT"]["quantity"],
-            "sodium": result["nutritional_info"]["totalNutrients"]["NA"]["quantity"],
-            "carbs": result["nutritional_info"]["totalNutrients"]["CHOCDF"]["quantity"],
-            "sugar": result["nutritional_info"]["totalNutrients"]["SUGAR"]["quantity"],
-            "protein": result["nutritional_info"]["totalNutrients"]["PROCNT"]["quantity"]
-        }
+        # Assume each food item might have individual nutritional info
+        food_items = []
+        for i, food_name in enumerate(result.get("foodName", [])):
+            # Extract nutritional info for each food item
+            nutrients = result["nutritional_info_per_item"][i]["nutritional_info"]["totalNutrients"]
+            food_info = {
+                "foodName": food_name,
+                "calories": nutrients["ENERC_KCAL"]["quantity"],
+                "total_fat": nutrients["FAT"]["quantity"],
+                "sodium": nutrients["NA"]["quantity"],
+                "carbs": nutrients["CHOCDF"]["quantity"],
+                "sugar": nutrients["SUGAR"]["quantity"],
+                "protein": nutrients["PROCNT"]["quantity"]
+            }
+            food_items.append(food_info)
+
     except KeyError as e:
         print(f"Key error: {e} - Check your JSON structure.")
-        selected_nutrients = {}
+        food_items = []
 
     # Saving the extracted information into a new JSON file
     with open('selected_nutritional_info.json', 'w') as f:
-        json.dump(selected_nutrients, f, indent=4)
+        json.dump(food_items, f, indent=4)
     print("Selected nutritional information saved to 'selected_nutritional_info.json'")
 
 if __name__ == '__main__':
