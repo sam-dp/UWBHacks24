@@ -44,7 +44,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
             fs.closeSync(fs.openSync(filePath, 'r'));
 
             // After saving the converted image, delete the uploaded file
-            deleteUploadedFile(file.path);
+            //deleteUploadedFile(file.path);
 
             // Call external API
             //callExternalAPI(filePath, res);
@@ -95,38 +95,50 @@ function callExternalAPI(imagePath, res) {
     });
 }
 
-// Function to call external API and download the response JSON file
+// Function to call external API for segmentation and then for nutritional information
 function callExternalAPIAndDownload(imagePath, res) {
     const apiUserToken = process.env.API_USER_TOKEN;
     const headers = { 'Authorization': `Bearer ${apiUserToken}` };
-    // const urlSegmentation = 'https://api.logmeal.com/v2/image/segmentation/complete';
-    const urlSegmentation = 'https://api.logmeal.com/v2/nutrition/recipe/nutritionalInfo/';
+    const segmentationEndpoint = 'https://api.logmeal.com/v2/image/segmentation/complete';
+    const nutritionEndpoint = 'https://api.logmeal.com/v2/nutrition/recipe/nutritionalInfo';
 
     const form = new FormData();
     form.append('image', fs.createReadStream(imagePath));
 
-    fetch(urlSegmentation, {
+    // Call segmentation endpoint first
+    fetch(segmentationEndpoint, {
         method: 'POST',
         headers: headers,
         body: form
     })
-    .then(response => {
-        // Check if response is successful
-        if (!response.ok) {
-            throw new Error('Failed to fetch API response');
+    .then(segmentationResponse => {
+        // Check if segmentation response is successful
+        if (!segmentationResponse.ok) {
+            throw new Error('Failed to fetch segmentation API response');
         }
-        
-        // Create a write stream to save the response JSON file
-        const jsonFilePath = 'response.json';
-        const fileStream = fs.createWriteStream(jsonFilePath);
-
-        // Pipe the response body to the file stream
-        response.body.pipe(fileStream);
-
-        // Listen for stream close event to indicate completion
-        fileStream.on('close', () => {
-            console.log('API Response JSON file downloaded:', jsonFilePath);
-            res.json({ message: 'Image received, saved, and processed successfully' });
+        // Extract imageId from segmentation response
+        return segmentationResponse.json();
+    })
+    .then(segmentationData => {
+        // Call nutritional information endpoint with the extracted imageId
+        const imageId = segmentationData.imageId;
+        return fetch(nutritionEndpoint, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ imageId: imageId })
+        })
+        .then(nutritionResponse => {
+            // Check if nutritional information response is successful
+            if (!nutritionResponse.ok) {
+                throw new Error('Failed to fetch nutritional information API response');
+            }
+            // Log response data
+            return nutritionResponse.json();
+        })
+        .then(nutritionData => {
+            console.log('Nutritional information:', nutritionData);
+            // Send response to client
+            res.json({ message: 'Nutritional information fetched successfully', data: nutritionData });
         });
     })
     .catch(error => {
@@ -134,6 +146,8 @@ function callExternalAPIAndDownload(imagePath, res) {
         res.status(500).send('Error calling external API');
     });
 }
+
+
 
 // Start the server
 app.listen(port, () => {
