@@ -95,11 +95,6 @@ function callExternalAPI(imagePath, res) {
     });
 }
 
-const fs = require('fs');
-const fetch = require('node-fetch');
-const FormData = require('form-data');
-require('dotenv').config();
-
 // Function to call external API and download the response JSON file
 function callExternalAPIAndDownload(imagePath, res) {
     const apiUserToken = process.env.API_USER_TOKEN;
