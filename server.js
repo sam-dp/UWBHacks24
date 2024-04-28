@@ -48,6 +48,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 
             // Call external API
             //callExternalAPI(filePath, res);
+            //callExternalAPIAndDownload(filePath, res);
         });
     })
     .catch((err) => {
@@ -87,6 +88,50 @@ function callExternalAPI(imagePath, res) {
         console.log('API Response:', data);
         // Here you can process the API response as needed
         res.json({ message: 'Image received, saved, and processed successfully' });
+    })
+    .catch(error => {
+        console.error('Error calling external API:', error);
+        res.status(500).send('Error calling external API');
+    });
+}
+
+const fs = require('fs');
+const fetch = require('node-fetch');
+const FormData = require('form-data');
+require('dotenv').config();
+
+// Function to call external API and download the response JSON file
+function callExternalAPIAndDownload(imagePath, res) {
+    const apiUserToken = process.env.API_USER_TOKEN;
+    const headers = { 'Authorization': `Bearer ${apiUserToken}` };
+    const urlSegmentation = 'https://api.logmeal.com/v2/image/segmentation/complete';
+
+    const form = new FormData();
+    form.append('image', fs.createReadStream(imagePath));
+
+    fetch(urlSegmentation, {
+        method: 'POST',
+        headers: headers,
+        body: form
+    })
+    .then(response => {
+        // Check if response is successful
+        if (!response.ok) {
+            throw new Error('Failed to fetch API response');
+        }
+        
+        // Create a write stream to save the response JSON file
+        const jsonFilePath = 'response.json';
+        const fileStream = fs.createWriteStream(jsonFilePath);
+
+        // Pipe the response body to the file stream
+        response.body.pipe(fileStream);
+
+        // Listen for stream close event to indicate completion
+        fileStream.on('close', () => {
+            console.log('API Response JSON file downloaded:', jsonFilePath);
+            res.json({ message: 'Image received, saved, and processed successfully' });
+        });
     })
     .catch(error => {
         console.error('Error calling external API:', error);
