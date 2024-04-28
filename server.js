@@ -69,6 +69,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
                 // callPythonAPI(filePath, (apiResponse) => {
                 //     res.send(apiResponse);
                 // });
+
             });
         })
         .catch((err) => {
