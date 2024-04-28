@@ -1,11 +1,11 @@
 [
     {
-        "foodName": "flan",
-        "calories": 181.25,
-        "total_fat": 5.0375000000000005,
-        "sodium": 66.25,
-        "carbs": 28.475,
-        "sugar": 28.9375,
-        "protein": 5.6625000000000005
+        "foodName": "tacos",
+        "calories": 793.573,
+        "total_fat": 44.28102,
+        "sodium": 624.7278019199999,
+        "carbs": 40.845794,
+        "sugar": 11.460909000000001,
+        "protein": 58.90347
     }
 ]
