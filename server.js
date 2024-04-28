@@ -14,6 +14,7 @@ const port = 3000;
 // Serves the HTML and CSS
 app.use(express.static('root'));
 
+
 // Configure multer to handle file uploads
 const upload = multer({ dest: 'root/11-resources/02-images/02-temp' });
 
@@ -66,9 +67,9 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
                 //deleteUploadedFile(file.path);
 
                 // Call external API using Python
-                // callPythonAPI(filePath, (apiResponse) => {
-                //     res.send(apiResponse);
-                // });
+                callPythonAPI(filePath, (apiResponse) => {
+                    res.send(apiResponse);
+                });
 
             });
         })

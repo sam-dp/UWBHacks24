@@ -43,7 +43,7 @@ def save_nutritional_info(result):
         food_items = []
 
     # Saving the extracted information into a new JSON file
-    with open('selected_nutritional_info.json', 'w') as f:
+    with open('root/11-resources/selected_nutritional_info.json', 'w') as f:
         json.dump(food_items, f, indent=4)
     print("Selected nutritional information saved to 'selected_nutritional_info.json'")
 

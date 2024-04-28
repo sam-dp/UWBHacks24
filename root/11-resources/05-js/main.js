@@ -33,11 +33,19 @@ input.addEventListener('change', function() {
     .catch(error => {
         console.error('Error uploading image:', error);
     });
+    
+    //updateInfoTable();
+    location.href = '../01-pages/nutrition.html';
 
+    
+});
+
+function updateInfoTable() {
     // Fetch the nutritional data from the JSON file and call the functions to update the UI
     fetch('../../../selected_nutritional_info.json')
     .then(response => response.json())
     .then(data => {
+        console.log("Inside json fetch");
         const foodNames = data.map(item => item.foodName);
         formatFoodNameList(foodNames);
         populateNutritionTable(data);
@@ -46,10 +54,7 @@ input.addEventListener('change', function() {
     .catch(error => {
         console.error('Error fetching nutritional info:', error);
     });
-
-    location.href = '../01-pages/nutrition.html';
-});
-
+}
 
 // Function to format the food name list
 function formatFoodNameList(foodNames) {
