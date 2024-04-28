@@ -17,6 +17,7 @@ This application was built using ```Node.js v20.12.2``` and ```Python``` using f
 ### Installation and Usage
 You must have a well supported-version of ```Python``` (including pip) installed, and of course an up-to-date ```node.js``` with the included ```node-modules```. When the project is installed, run  ```node server.js``` to start a localhost server on port 3000.
 
+You will need a LogMeal API User Token stored in a ```.env``` file (API_USER_TOKEN=<KEY>) in the same "base" directory as server.js.
 
 ---
 
