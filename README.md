@@ -1,5 +1,5 @@
 # NutriPic
-## UWB HACKS AI 2024
+## UWB HACKS AI 2024!
 
 
 Using just a single image of a meal, NutriPic employs computer vision and deep learning techniques to identify food types and generate nutrition information for the user.
