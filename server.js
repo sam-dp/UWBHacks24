@@ -48,7 +48,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 
             // Call external API
             //callExternalAPI(filePath, res);
-            //callExternalAPIAndDownload(filePath, res);
+            callExternalAPIAndDownload(filePath, res);
         });
     })
     .catch((err) => {
@@ -99,7 +99,8 @@ function callExternalAPI(imagePath, res) {
 function callExternalAPIAndDownload(imagePath, res) {
     const apiUserToken = process.env.API_USER_TOKEN;
     const headers = { 'Authorization': `Bearer ${apiUserToken}` };
-    const urlSegmentation = 'https://api.logmeal.com/v2/image/segmentation/complete';
+    // const urlSegmentation = 'https://api.logmeal.com/v2/image/segmentation/complete';
+    const urlSegmentation = 'https://api.logmeal.com/v2/nutrition/recipe/nutritionalInfo/';
 
     const form = new FormData();
     form.append('image', fs.createReadStream(imagePath));
